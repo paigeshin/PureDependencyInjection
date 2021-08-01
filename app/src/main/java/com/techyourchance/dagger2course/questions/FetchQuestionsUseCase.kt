@@ -9,18 +9,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 // Encapsulate Main Flows
-class FetchQuestionsUseCase {
+class FetchQuestionsUseCase(private val retrofit: Retrofit) {
 
     sealed class Result {
         class Success(val questions: List<Question>): Result()
         object Failure: Result()
     }
-
-    // init retrofit
-    private val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
 
     private val stackoverflowApi = retrofit.create(StackoverflowApi::class.java)
 

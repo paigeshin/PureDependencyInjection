@@ -17,3 +17,7 @@ v.0.0.3
 v.0.0.4
 
 - ScreenNavigator
+
+v.0.0.5
+
+- Share same retrofit instance using MyApplication
