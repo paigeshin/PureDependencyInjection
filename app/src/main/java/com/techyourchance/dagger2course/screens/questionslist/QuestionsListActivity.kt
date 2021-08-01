@@ -3,14 +3,12 @@ package com.techyourchance.dagger2course.screens.questionslist
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
-import com.techyourchance.dagger2course.Constants
 import com.techyourchance.dagger2course.networking.StackoverflowApi
+import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
 import com.techyourchance.dagger2course.questions.Question
 import com.techyourchance.dagger2course.screens.common.dialogs.ServerErrorDialogFragment
 import com.techyourchance.dagger2course.screens.questiondetails.QuestionDetailsActivity
 import kotlinx.coroutines.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class QuestionsListActivity : AppCompatActivity(), QuestionListViewMvc.Listener {
 
@@ -22,18 +20,13 @@ class QuestionsListActivity : AppCompatActivity(), QuestionListViewMvc.Listener 
 
     private lateinit var viewMvc: QuestionListViewMvc
 
+    private lateinit var fetchQuestionsUseCase: FetchQuestionsUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         viewMvc = QuestionListViewMvc(LayoutInflater.from(this), null)
         setContentView(viewMvc.rootView)
-
-        // init retrofit
-        val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        stackoverflowApi = retrofit.create(StackoverflowApi::class.java)
+        fetchQuestionsUseCase = FetchQuestionsUseCase()
     }
 
     override fun onStart() {
@@ -61,21 +54,19 @@ class QuestionsListActivity : AppCompatActivity(), QuestionListViewMvc.Listener 
     private fun fetchQuestions() {
         coroutineScope.launch {
             viewMvc.showProgressIndication()
+            val result = fetchQuestionsUseCase.fetchLastestQuestions()
             try {
-                val response = stackoverflowApi.lastActiveQuestions(20)
-                if (response.isSuccessful && response.body() != null) {
-                    viewMvc.bindQuestions(response.body()!!.questions)
-                    isDataLoaded = true
-                } else {
-                    onFetchFailed()
-                }
-            } catch (t: Throwable) {
-                if (t !is CancellationException) {
-                    onFetchFailed()
+                when(result) {
+                    is FetchQuestionsUseCase.Result.Success -> {
+                        viewMvc.bindQuestions(result.questions)
+                        isDataLoaded = true
+                    }
+                    is FetchQuestionsUseCase.Result.Failure -> onFetchFailed()
                 }
             } finally {
                 viewMvc.hideProgressIndication()
             }
+
         }
     }
 
@@ -84,7 +75,6 @@ class QuestionsListActivity : AppCompatActivity(), QuestionListViewMvc.Listener 
                 .add(ServerErrorDialogFragment.newInstance(), null)
                 .commitAllowingStateLoss()
     }
-
 
 
 }

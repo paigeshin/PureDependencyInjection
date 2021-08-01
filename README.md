@@ -3,4 +3,9 @@
 v.0.0.1
 
 - Code Separation in `QuestionsListActivity` and `QuestionsDetailActivity`
-- Base Class for removing code duplicates
+- Base Class for removing code duplications on `QuestionsListMvc` and `QuestionsDetailMvc`
+
+v.0.0.2
+
+- FetchQuestionsUseCase
+- FetchQuestionDetailUseCase
