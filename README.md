@@ -25,3 +25,7 @@ v.0.0.5
 v.0.0.6
 
 - passing stackoverflow api instead of retrofit
+
+v.0.0.7
+
+- Applied `Law of Demeter`
