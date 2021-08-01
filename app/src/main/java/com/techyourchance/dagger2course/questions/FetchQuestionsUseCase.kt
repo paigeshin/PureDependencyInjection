@@ -9,14 +9,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 // Encapsulate Main Flows
-class FetchQuestionsUseCase(private val retrofit: Retrofit) {
+class FetchQuestionsUseCase(private val stackoverflowApi: StackoverflowApi) {
 
     sealed class Result {
         class Success(val questions: List<Question>): Result()
         object Failure: Result()
     }
-
-    private val stackoverflowApi = retrofit.create(StackoverflowApi::class.java)
 
     suspend fun fetchLastestQuestions(): Result {
         return withContext(Dispatchers.IO) {

@@ -21,3 +21,7 @@ v.0.0.4
 v.0.0.5
 
 - Share same retrofit instance using MyApplication
+
+v.0.0.6
+
+- passing stackoverflow api instead of retrofit
