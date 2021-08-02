@@ -1,5 +1,11 @@
 # AOS_Kotlin_dagger2_refactoring_project
 
+# Refactoring Guide
+
+- One Activity => Mvc + Dialog + Network + Navigator
+- RootComposition, Application Layer => Initialize global instance
+- AppComposition, Activity Layer => Initialize Activity related objects (ScreenNavigators, Dialog)
+
 # Basic Refactoring
 
 ### Goals
