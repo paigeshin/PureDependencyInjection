@@ -1,5 +1,6 @@
 package com.techyourchance.dagger2course.common.composition
 
+import androidx.annotation.UiThread
 import com.techyourchance.dagger2course.Constants
 import com.techyourchance.dagger2course.networking.StackoverflowApi
 import com.techyourchance.dagger2course.questions.FetchQuestionDetailsUseCase
@@ -7,15 +8,21 @@ import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+@UiThread
 class AppCompositionRoot {
-    // init retrofit
-    private val retrofit = Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+
+    private val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
+                .baseUrl(Constants.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+    }
+
 
     // init stackoverflow API
-    public val stackoverflowApi = retrofit.create(StackoverflowApi::class.java)
+    public val stackoverflowApi: StackoverflowApi by lazy {
+        retrofit.create(StackoverflowApi::class.java)
+    }
 
     // Object should be stateful
     // When you want to share a object and multiple clients try to access it, that might be harmful.

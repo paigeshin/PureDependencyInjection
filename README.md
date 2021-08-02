@@ -33,3 +33,7 @@ v.0.0.7
 v.0.0.8
 
 - Created app composition class in order to organize code for less dependency
+
+v.0.0.9
+
+- Global Service refactoring using `lazy` keyword and `get()` keyword
