@@ -116,6 +116,17 @@ open class BaseActivity: AppCompatActivity() {
 
 ⇒ Activities which inherit BaseActivity will have its own `compositionRoot` for each activity.
 
+# AppCompositionRoot
+
+- Retrofit
+- Stackoverflow API
+
+# ActivityCompositionRoot
+
+- Network UseCases
+
+# Version Control
+
 v.0.0.1
 
 - Code Separation in `QuestionsListActivity` and `QuestionsDetailActivity`
