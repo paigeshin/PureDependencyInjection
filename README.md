@@ -37,3 +37,7 @@ v.0.0.8
 v.0.0.9
 
 - Global Service refactoring using `lazy` keyword and `get()` keyword
+
+v.0.0.10
+
+- Create AppCompositionRoot

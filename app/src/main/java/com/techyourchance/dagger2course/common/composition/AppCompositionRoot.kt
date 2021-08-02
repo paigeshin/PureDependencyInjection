@@ -18,16 +18,9 @@ class AppCompositionRoot {
                 .build()
     }
 
-
     // init stackoverflow API
-    public val stackoverflowApi: StackoverflowApi by lazy {
+    val stackoverflowApi: StackoverflowApi by lazy {
         retrofit.create(StackoverflowApi::class.java)
     }
 
-    // Object should be stateful
-    // When you want to share a object and multiple clients try to access it, that might be harmful.
-    // However, if you put get(), this getter function will be invoked and will create a new instance of which questions to use.
-    // `Just make sure you put `getter` when you want to make some object sharable between multiple clients.`
-    public val fetchQuestionsUseCase get() = FetchQuestionsUseCase(stackoverflowApi)
-    public val fetchQuestionDetailUseCase get() = FetchQuestionDetailsUseCase(stackoverflowApi)
 }
