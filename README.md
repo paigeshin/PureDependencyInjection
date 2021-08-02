@@ -29,3 +29,7 @@ v.0.0.6
 v.0.0.7
 
 - Applied `Law of Demeter`
+
+v.0.0.8
+
+- Created app composition class in order to organize code for less dependency
