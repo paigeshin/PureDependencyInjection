@@ -6,7 +6,7 @@ import com.techyourchance.dagger2course.common.composition.ActivityCompositionRo
 
 open class BaseActivity: AppCompatActivity() {
     private val appCompositionRoot get() = (application as MyApplication).appCompositionRoot
-    val compositionRoot by lazy {
-        ActivityCompositionRoot(this, appCompositionRoot)
+    val activityCompositionRoot by lazy {
+        ActivityCompositionRoot(this, supportFragmentManager, appCompositionRoot)
     }
 }

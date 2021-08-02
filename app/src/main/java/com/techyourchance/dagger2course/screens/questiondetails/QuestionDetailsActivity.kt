@@ -22,14 +22,10 @@ class QuestionDetailsActivity : BaseActivity(), QuestionDetailsViewMvc.Listener 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewMvc = QuestionDetailsViewMvc(LayoutInflater.from(this), null)
-
         setContentView(viewMvc.rootView)
-
-        fetchQuestionDetailsUseCase = compositionRoot.fetchQuestionDetailUseCase
-
-        dialogsNavigator = DialogsNavigator(supportFragmentManager)
-
-        screensNavigator = compositionRoot.screensNavigator
+        fetchQuestionDetailsUseCase = activityCompositionRoot.fetchQuestionDetailUseCase
+        dialogsNavigator = activityCompositionRoot.dialogsNavigator
+        screensNavigator = activityCompositionRoot.screensNavigator
 
         // retrieve question ID passed from outside
         questionId = intent.extras!!.getString(EXTRA_QUESTION_ID)!!
