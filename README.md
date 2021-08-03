@@ -188,3 +188,8 @@ v.0.0.12
 v.0.0.13
 
 - Another abstraction, created ViewMvcFactory and put it in `CompositionRoot`
+
+v.0.0.14
+
+- added new `fun newQuestionDetailsViewMvc(parent: ViewGroup?): QuestionDetailsViewMvc { return QuestionDetailsViewMvc(layoutInflater, parent) }`
+- Nothing violates the law of demeter now.
