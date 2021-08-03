@@ -199,7 +199,15 @@ v.0.0.14
 v.0.0.15
 
 - Created `PresentationCompositionRoot` to create a new layer
-- Now App has three layers
-  - App Layer
-  - Activity Layer
-  - Presentation Layer
+
+### Now App has three layers
+
+- App Layer
+- Activity Layer
+- Presentation Layer
+
+### App Has now three scopes
+
+- Application Scope, AppCompositionRoot
+- Activity Scope, ActivityCompositionRoot
+- Presentation Scope or Controllor Scope, PresentationCompositionRoot, QuestionsListFragment
