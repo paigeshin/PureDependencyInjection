@@ -184,3 +184,7 @@ v.0.0.11
 v.0.0.12
 
 - renamed `ActivityCompositionRoot` to `CompositionRoot` because `CompositionRoot` is shared between activity and fragment
+
+v.0.0.13
+
+- Another abstraction, created ViewMvcFactory and put it in `CompositionRoot`

@@ -6,6 +6,7 @@ import com.techyourchance.dagger2course.networking.StackoverflowApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+// AppCompositionRoot contains all the services app needs in Application Level
 @UiThread
 class AppCompositionRoot {
 

@@ -1,20 +1,24 @@
 package com.techyourchance.dagger2course.common.composition
 
-import android.app.Activity
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentManager
 import com.techyourchance.dagger2course.questions.FetchQuestionDetailsUseCase
 import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
 import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
+import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
 
+// CompositionRoot contains all the services app needs in Activity & Fragment Level
 class CompositionRoot(private val activity: AppCompatActivity,
                       private val appCompositionRoot: AppCompositionRoot) {
 
     val screensNavigator by lazy {
         ScreensNavigator(activity)
     }
+
+    private val layoutInflater get() = LayoutInflater.from(activity)
+
+    val viewMvcFactory get() = ViewMvcFactory(layoutInflater)
 
     private val fragmentManager get() = activity.supportFragmentManager
 

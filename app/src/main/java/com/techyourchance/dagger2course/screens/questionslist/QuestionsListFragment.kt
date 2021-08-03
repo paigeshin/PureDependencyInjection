@@ -4,11 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
 import com.techyourchance.dagger2course.questions.Question
 import com.techyourchance.dagger2course.screens.common.ScreensNavigator
-import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
 import com.techyourchance.dagger2course.screens.common.fragments.BaseFragment
 import kotlinx.coroutines.*
@@ -24,13 +22,13 @@ class QuestionsListFragment : BaseFragment(), QuestionListViewMvc.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        fetchQuestionsUseCase = activityCompositionRoot.fetchQuestionsUseCase
-        dialogsNavigator = activityCompositionRoot.dialogsNavigator
-        screensNavigator = activityCompositionRoot.screensNavigator
+        fetchQuestionsUseCase = compositionRoot.fetchQuestionsUseCase
+        dialogsNavigator = compositionRoot.dialogsNavigator
+        screensNavigator = compositionRoot.screensNavigator
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewMvc = QuestionListViewMvc(LayoutInflater.from(requireContext()), container) //second argument is container, that's why we put ViewGroup as a second argument to MVC
+        viewMvc = compositionRoot.viewMvcFactory.newQuestionsListViewMvc(container)
         return viewMvc.rootView
     }
 
