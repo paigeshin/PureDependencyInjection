@@ -180,3 +180,7 @@ AppCompositionRoot (Application Scope) <-> ActivityCompositionRoot(Activity Scop
 v.0.0.11
 
 - refactored to fragment to show reusablility of MVC
+
+v.0.0.12
+
+- renamed `ActivityCompositionRoot` to `CompositionRoot` because `CompositionRoot` is shared between activity and fragment

@@ -5,6 +5,6 @@ import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
 
 open class BaseFragment: Fragment() {
 
-    protected val activityCompositionRoot get() = (requireContext() as BaseActivity).activityCompositionRoot
+    protected val activityCompositionRoot get() = (requireContext() as BaseActivity).compositionRoot
 
 }

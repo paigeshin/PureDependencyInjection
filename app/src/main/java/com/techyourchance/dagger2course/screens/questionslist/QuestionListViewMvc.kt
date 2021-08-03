@@ -26,7 +26,6 @@ class QuestionListViewMvc(
     private var recyclerView: RecyclerView
     private var questionsAdapter: QuestionsAdapter
 
-
     init {
 
         // init pull-down-to-refresh

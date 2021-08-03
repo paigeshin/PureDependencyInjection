@@ -9,14 +9,12 @@ import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
 import com.techyourchance.dagger2course.screens.common.ScreensNavigator
 import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
 
-class ActivityCompositionRoot(private val activity: AppCompatActivity,
-                              private val appCompositionRoot: AppCompositionRoot) {
+class CompositionRoot(private val activity: AppCompatActivity,
+                      private val appCompositionRoot: AppCompositionRoot) {
 
     val screensNavigator by lazy {
         ScreensNavigator(activity)
     }
-
-    private val layoutInflater = LayoutInflater.from(activity)
 
     private val fragmentManager get() = activity.supportFragmentManager
 
