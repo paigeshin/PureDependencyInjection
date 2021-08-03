@@ -194,3 +194,12 @@ v.0.0.14
 - added new `fun newQuestionDetailsViewMvc(parent: ViewGroup?): QuestionDetailsViewMvc { return QuestionDetailsViewMvc(layoutInflater, parent) }`
 - Nothing violates the law of demeter now.
 - All the services app need are now in AppCompositionRoot and CompositionRoot
+- Activity and Fragment don't know instantiation of each service
+
+v.0.0.15
+
+- Created `PresentationCompositionRoot` to create a new layer
+- Now App has three layers
+  - App Layer
+  - Activity Layer
+  - Presentation Layer

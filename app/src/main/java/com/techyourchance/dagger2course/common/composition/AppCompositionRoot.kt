@@ -9,17 +9,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 // AppCompositionRoot contains all the services app needs in Application Level
 @UiThread
 class AppCompositionRoot {
-
     private val retrofit: Retrofit by lazy {
         Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
     }
-
     // init stackoverflow API
     val stackoverflowApi: StackoverflowApi by lazy {
         retrofit.create(StackoverflowApi::class.java)
     }
-
 }
