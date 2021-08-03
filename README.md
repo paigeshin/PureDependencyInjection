@@ -176,3 +176,7 @@ v.0.0.10
 - Create AppCompositionRoot
 
 AppCompositionRoot (Application Scope) <-> ActivityCompositionRoot(Activity Scope)
+
+v.0.0.11
+
+- refactored to fragment to show reusablility of MVC
