@@ -193,3 +193,4 @@ v.0.0.14
 
 - added new `fun newQuestionDetailsViewMvc(parent: ViewGroup?): QuestionDetailsViewMvc { return QuestionDetailsViewMvc(layoutInflater, parent) }`
 - Nothing violates the law of demeter now.
+- All the services app need are now in AppCompositionRoot and CompositionRoot
