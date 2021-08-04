@@ -41,7 +41,7 @@
 ### Quiz
 
 ![plot](./quiz.png)
-⇒ This is alright, because List<Data> mData is not Object but Data Structure
+⇒ This is alright, because `List<Data> mData` is not Object but Data Structure
 
 # Refactoring Guide
 
