@@ -213,4 +213,23 @@ v.0.0.15
 - Activity Scope, ActivityCompositionRoot
 - Presentation Scope or Controllor Scope, PresentationCompositionRoot / Activities and Fragments
 
+### Example of QuestionsListFragment
+
+```kotlin
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private lateinit var fetchQuestionsUseCase: FetchQuestionsUseCase
+    private lateinit var dialogsNavigator: DialogsNavigator
+    private lateinit var screensNavigator: ScreensNavigator
+    private lateinit var viewMvc: QuestionListViewMvc
+    private var isDataLoaded = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        fetchQuestionsUseCase = compositionRoot.fetchQuestionsUseCase
+        dialogsNavigator = compositionRoot.dialogsNavigator
+        screensNavigator = compositionRoot.screensNavigator
+    }
+```
+
 => If you apply this principle, just by reading properties on class, you can easily understand what the class does
+=> Less dependency, it's all abstracted out on CompositionRoot
