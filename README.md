@@ -238,3 +238,10 @@ v.0.0.15
 => If you apply this principle, just by reading properties on class, you can easily understand what the class does
 
 => Less dependency, it's all abstracted out on CompositionRoot
+
+# The Main Benefit of Dependency Injection
+
+![plot](./benefit.png)
+
+- **Non-repetitive definition and exposure of the entire object graph by composition root (both internally and externally) is the main benefit of Dependency Injection.**
+- With Dependency Injection, you can keep your classes small and focused, but still easily compose them into arbitrary long chains to achieve complex functionality
