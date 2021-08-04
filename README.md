@@ -134,7 +134,7 @@ open class BaseActivity: AppCompatActivity() {
 
 # Version Control
 
-- v.0.0.15 => Pure Dependency Injection
+=> v.0.0.15, Pure Dependency Injection & Vanilla Dependency Injection & Poor Man's Dependency Injectiom. Not recommended way.
 
 v.0.0.1
 
