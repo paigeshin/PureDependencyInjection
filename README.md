@@ -2,6 +2,38 @@
 
 ![plot](./puredj.png)
 
+# The Main Benefit of Dependency Injection
+
+![plot](./benefit.png)
+
+- **Non-repetitive definition and exposure of the entire object graph by composition root (both internally and externally) is the main benefit of Dependency Injection.**
+- With Dependency Injection, you can keep your classes small and focused, but still easily compose them into arbitrary long chains to achieve complex functionality
+- The main benefits of Dependency Injection is that it enables `Singe Responsibility Principle` and `Reusability`
+
+### Context Isolation
+
+- Protect all the services which I construct inside of composition, including all global services, all up scope services from being exposed to activity context `by design`. Therefore, we can prevent app from memory leaks associated with accidentally passing activity context into global objects.
+
+# Objects vs Data Structures
+
+### Objects
+
+- exposes behavior
+
+⇒ It's alright to construct data structures inside objects.
+
+⇒ It's alright to return data structures from objects.
+
+### Data Structures
+
+- exposes data
+
+⇒ Data structures can encapsulate other data structures
+
+⇒ ❗️It's not alright to make your data structures dependent on other objects.
+
+⇒ ❗️Data structures shouldn't know anything about objects make your data structures dependent on other objects.
+
 # Refactoring Guide
 
 - Application Scope, AppCompositionRoot
@@ -207,6 +239,10 @@ v.0.0.16
 
 - made `application context` available throughout activities & fragments in `ActivityCompositionRoot`
 
+v.0.0.17
+
+- made `data class` in order to represent `data structure` instead of behavior
+
 ### Now App has three layers
 
 - App Layer
@@ -240,15 +276,3 @@ v.0.0.16
 => If you apply this principle, just by reading properties on class, you can easily understand what the class does
 
 => Less dependency, it's all abstracted out on CompositionRoot
-
-# The Main Benefit of Dependency Injection
-
-![plot](./benefit.png)
-
-- **Non-repetitive definition and exposure of the entire object graph by composition root (both internally and externally) is the main benefit of Dependency Injection.**
-- With Dependency Injection, you can keep your classes small and focused, but still easily compose them into arbitrary long chains to achieve complex functionality
-- The main benefits of Dependency Injection is that it enables `Singe Responsibility Principle` and `Reusability`
-
-### Context Isolation
-
-- Protect all the services which I construct inside of composition, including all global services, all up scope services from being exposed to activity context `by design`. Therefore, we can prevent app from memory leaks associated with accidentally passing activity context into global objects.
