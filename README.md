@@ -205,6 +205,10 @@ v.0.0.15
 
 - Created `PresentationCompositionRoot` to create a new layer
 
+v.0.0.16
+
+- made `application context` available throughout activities & fragments in `ActivityCompositionRoot`
+
 ### Now App has three layers
 
 - App Layer
