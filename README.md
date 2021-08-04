@@ -232,4 +232,5 @@ v.0.0.15
 ```
 
 => If you apply this principle, just by reading properties on class, you can easily understand what the class does
+
 => Less dependency, it's all abstracted out on CompositionRoot
