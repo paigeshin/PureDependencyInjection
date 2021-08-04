@@ -136,8 +136,6 @@ open class BaseActivity: AppCompatActivity() {
 
 # Version Control
 
-=> v.0.0.15, Pure Dependency Injection & Vanilla Dependency Injection & Poor Man's Dependency Injectiom. Not recommended way.
-
 v.0.0.1
 
 - Code Separation in `QuestionsListActivity` and `QuestionsDetailActivity`
@@ -250,4 +248,7 @@ v.0.0.16
 - **Non-repetitive definition and exposure of the entire object graph by composition root (both internally and externally) is the main benefit of Dependency Injection.**
 - With Dependency Injection, you can keep your classes small and focused, but still easily compose them into arbitrary long chains to achieve complex functionality
 - The main benefits of Dependency Injection is that it enables `Singe Responsibility Principle` and `Reusability`
-- Protect all the services which I construct inside of composition, including all global services, all up scope services from being exposed to activity context `by design`
+
+### Context Isolation
+
+- Protect all the services which I construct inside of composition, including all global services, all up scope services from being exposed to activity context `by design`. Therefore, we can prevent app from memory leaks associated with accidentally passing activity context into global objects.
