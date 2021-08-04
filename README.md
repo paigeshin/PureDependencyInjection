@@ -134,6 +134,8 @@ open class BaseActivity: AppCompatActivity() {
 
 # Version Control
 
+- v.0.0.15 => Pure Dependency Injection
+
 v.0.0.1
 
 - Code Separation in `QuestionsListActivity` and `QuestionsDetailActivity`
@@ -234,3 +236,7 @@ v.0.0.15
 => If you apply this principle, just by reading properties on class, you can easily understand what the class does
 
 => Less dependency, it's all abstracted out on CompositionRoot
+
+---
+
+# Pure Depenency Injection
