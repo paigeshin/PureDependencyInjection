@@ -32,7 +32,11 @@
 
 ⇒ ❗️It's not alright to make your data structures dependent on other objects.
 
-⇒ ❗️Data structures shouldn't know anything about objects make your data structures dependent on other objects.
+⇒ ❗️Data structures shouldn't know anything about objects
+
+### Relevancy with Dependency Injection
+
+- Dependency Injection Architectural Pattern deals with objects, not data structures.
 
 # Refactoring Guide
 
