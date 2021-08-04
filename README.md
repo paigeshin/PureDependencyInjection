@@ -212,3 +212,5 @@ v.0.0.15
 - Application Scope, AppCompositionRoot
 - Activity Scope, ActivityCompositionRoot
 - Presentation Scope or Controllor Scope, PresentationCompositionRoot / Activities and Fragments
+
+=> If you apply this principle, just by reading properties on class, you can easily understand what the class does
