@@ -38,6 +38,11 @@
 
 - Dependency Injection Architectural Pattern deals with objects, not data structures.
 
+### Quiz
+
+![plot](./quiz.png)
+⇒ This is alright, because List<Data> mData is not Object but Data Structure
+
 # Refactoring Guide
 
 - Application Scope, AppCompositionRoot
