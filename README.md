@@ -252,6 +252,10 @@ v.0.0.17
 
 - made `data class` in order to represent `data structure` instead of behavior
 
+v.0.0.18
+
+- added Injector 
+
 ### Now App has three layers
 
 - App Layer
@@ -285,3 +289,139 @@ v.0.0.17
 => If you apply this principle, just by reading properties on class, you can easily understand what the class does
 
 => Less dependency, it's all abstracted out on CompositionRoot
+
+# Adding Injector
+
+### Base Fragment
+
+```kotlin
+package com.techyourchance.dagger2course.screens.common.fragments
+
+import androidx.fragment.app.Fragment
+import com.techyourchance.dagger2course.common.composition.Injector
+import com.techyourchance.dagger2course.common.composition.PresentationCompositionRoot
+import com.techyourchance.dagger2course.screens.common.activities.BaseActivity
+
+open class BaseFragment: Fragment() {
+
+    private val compositionRoot by lazy {
+        PresentationCompositionRoot((requireContext() as BaseActivity).activityCompositionRoot)
+    }
+
+    protected val injector get() = Injector(compositionRoot)
+
+}
+```
+
+### Injector
+
+```kotlin
+package com.techyourchance.dagger2course.common.composition
+
+import com.techyourchance.dagger2course.screens.questiondetails.QuestionDetailsActivity
+import com.techyourchance.dagger2course.screens.questionslist.QuestionsListFragment
+
+class Injector(private val compositionRoot: PresentationCompositionRoot) {
+    fun inject(fragment: QuestionsListFragment) {
+        fragment.dialogsNavigator = compositionRoot.dialogsNavigator
+        fragment.fetchQuestionsUseCase = compositionRoot.fetchQuestionsUseCase
+        fragment.screensNavigator = compositionRoot.screensNavigator
+        fragment.viewMvcFactory = compositionRoot.viewMvcFactory
+    }
+    fun inject(activity: QuestionDetailsActivity) {
+        activity.dialogsNavigator = compositionRoot.dialogsNavigator
+        activity.fetchQuestionDetailsUseCase = compositionRoot.fetchQuestionDetailUseCase
+        activity.screensNavigator = compositionRoot.screensNavigator
+        activity.viewMvcFactory = compositionRoot.viewMvcFactory
+    }
+
+}
+```
+
+### Fragment
+
+```kotlin
+package com.techyourchance.dagger2course.screens.questionslist
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
+import com.techyourchance.dagger2course.questions.Question
+import com.techyourchance.dagger2course.screens.common.ScreensNavigator
+import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
+import com.techyourchance.dagger2course.screens.common.fragments.BaseFragment
+import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
+import kotlinx.coroutines.*
+
+class QuestionsListFragment : BaseFragment(), QuestionListViewMvc.Listener {
+
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+    lateinit var fetchQuestionsUseCase: FetchQuestionsUseCase
+    lateinit var dialogsNavigator: DialogsNavigator
+    lateinit var screensNavigator: ScreensNavigator
+    lateinit var viewMvcFactory: ViewMvcFactory
+
+    private lateinit var viewMvc: QuestionListViewMvc
+
+    private var isDataLoaded = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        //This initialize all the dependencies 
+				injector.inject(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewMvc = viewMvcFactory.newQuestionsListViewMvc(container)
+        return viewMvc.rootView
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewMvc.registerListener(this)
+        if (!isDataLoaded) {
+            fetchQuestions()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        coroutineScope.coroutineContext.cancelChildren()
+        viewMvc.unregisterListener(this)
+    }
+
+    override fun onRefreshClicked() {
+        fetchQuestions()
+    }
+
+    override fun onQuestionClicked(clickedQuestion: Question) {
+        screensNavigator.toQuestionDetails(clickedQuestion.id)
+    }
+
+    private fun fetchQuestions() {
+        coroutineScope.launch {
+            viewMvc.showProgressIndication()
+            val result = fetchQuestionsUseCase.fetchLastestQuestions()
+            try {
+                when (result) {
+                    is FetchQuestionsUseCase.Result.Success -> {
+                        viewMvc.bindQuestions(result.questions)
+                        isDataLoaded = true
+                    }
+                    is FetchQuestionsUseCase.Result.Failure -> onFetchFailed()
+                }
+            } finally {
+                viewMvc.hideProgressIndication()
+            }
+        }
+    }
+
+    private fun onFetchFailed() {
+        dialogsNavigator.showServerErrorDialog()
+    }
+
+}
+```
