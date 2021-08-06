@@ -256,6 +256,10 @@ v.0.0.18
 
 - added Injector 
 
+v.0.0.19
+
+- Added Custom Annotation in order to avoid hard coded Injector
+
 ### Now App has three layers
 
 - App Layer
@@ -372,6 +376,177 @@ class QuestionsListFragment : BaseFragment(), QuestionListViewMvc.Listener {
         super.onCreate(savedInstanceState)
         //This initialize all the dependencies 
 				injector.inject(this)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewMvc = viewMvcFactory.newQuestionsListViewMvc(container)
+        return viewMvc.rootView
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewMvc.registerListener(this)
+        if (!isDataLoaded) {
+            fetchQuestions()
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        coroutineScope.coroutineContext.cancelChildren()
+        viewMvc.unregisterListener(this)
+    }
+
+    override fun onRefreshClicked() {
+        fetchQuestions()
+    }
+
+    override fun onQuestionClicked(clickedQuestion: Question) {
+        screensNavigator.toQuestionDetails(clickedQuestion.id)
+    }
+
+    private fun fetchQuestions() {
+        coroutineScope.launch {
+            viewMvc.showProgressIndication()
+            val result = fetchQuestionsUseCase.fetchLastestQuestions()
+            try {
+                when (result) {
+                    is FetchQuestionsUseCase.Result.Success -> {
+                        viewMvc.bindQuestions(result.questions)
+                        isDataLoaded = true
+                    }
+                    is FetchQuestionsUseCase.Result.Failure -> onFetchFailed()
+                }
+            } finally {
+                viewMvc.hideProgressIndication()
+            }
+        }
+    }
+
+    private fun onFetchFailed() {
+        dialogsNavigator.showServerErrorDialog()
+    }
+
+}
+```
+
+# Adding Annotation Processor
+
+### Service.kt (Interface)
+
+```kotlin
+@Target(AnnotationTarget.FIELD)
+@Retention(AnnotationRetention.RUNTIME)
+annotation class Service {}
+```
+
+### Injector.kt
+
+```kotlin
+package com.techyourchance.dagger2course.common.dependencyinjection
+
+import com.techyourchance.dagger2course.questions.FetchQuestionDetailsUseCase
+import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
+import com.techyourchance.dagger2course.screens.common.ScreensNavigator
+import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
+import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
+import java.lang.reflect.Field
+
+class Injector(private val compositionRoot: PresentationCompositionRoot) {
+
+    fun inject(client: Any) {
+        for(field in getAllFields(client)){
+            if(inAnnotatedForInjection(field)) {
+                injectField(client, field)
+            }
+        }
+    }
+    private fun getAllFields(client: Any): Array<out Field> {
+        val clientClass = client::class.java
+        return clientClass.declaredFields
+    }
+
+    private fun inAnnotatedForInjection(field: Field): Boolean {
+        val fieldAnnotations = field.annotations
+        for(annotation in fieldAnnotations) {
+            if(annotation is Service) {
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun injectField(client: Any, field: Field) {
+        val isAccessibleInitially = field.isAccessible
+        field.isAccessible = true
+        field.set(client, getServiceForClass(field.type))
+        field.isAccessible = isAccessibleInitially
+    }
+
+    private fun getServiceForClass(type: Class<*>): Any {
+        when(type) {
+            DialogsNavigator::class.java -> {
+                return compositionRoot.dialogsNavigator
+            }
+            ScreensNavigator::class.java -> {
+                return compositionRoot.screensNavigator
+            }
+            FetchQuestionsUseCase::class.java -> {
+                return compositionRoot.fetchQuestionsUseCase
+            }
+            FetchQuestionDetailsUseCase::class.java -> {
+                return compositionRoot.fetchQuestionDetailUseCase
+            }
+            ViewMvcFactory::class.java -> {
+                return compositionRoot.viewMvcFactory
+            }
+            else -> {
+                throw Exception("Unsupported Service Type: $type")
+            }
+        }
+    }
+
+}
+```
+
+### QuestionsListFragment.kt
+
+```kotlin
+package com.techyourchance.dagger2course.screens.questionslist
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.techyourchance.dagger2course.common.dependencyinjection.Service
+import com.techyourchance.dagger2course.questions.FetchQuestionsUseCase
+import com.techyourchance.dagger2course.questions.Question
+import com.techyourchance.dagger2course.screens.common.ScreensNavigator
+import com.techyourchance.dagger2course.screens.common.dialogs.DialogsNavigator
+import com.techyourchance.dagger2course.screens.common.fragments.BaseFragment
+import com.techyourchance.dagger2course.screens.common.viewsmvc.ViewMvcFactory
+import kotlinx.coroutines.*
+
+class QuestionsListFragment : BaseFragment(), QuestionListViewMvc.Listener {
+
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+    @field:Service
+    private lateinit var fetchQuestionsUseCase: FetchQuestionsUseCase
+    @field:Service
+    private lateinit var dialogsNavigator: DialogsNavigator
+    @field:Service
+    private lateinit var screensNavigator: ScreensNavigator
+    @field:Service
+    private lateinit var viewMvcFactory: ViewMvcFactory
+
+    private lateinit var viewMvc: QuestionListViewMvc
+
+    private var isDataLoaded = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        injector.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
